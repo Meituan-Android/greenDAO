@@ -28,8 +28,9 @@ import java.util.List;
 <#if entity.active>
 import ${schema.defaultJavaPackageDao}.DaoSession;
 import de.greenrobot.dao.DaoException;
-
 </#if>
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose;
 <#if entity.additionalImportsEntity?has_content>
 <#list entity.additionalImportsEntity as additionalImport>
 import ${additionalImport};
@@ -53,10 +54,20 @@ entity.interfacesToImplement?has_content> implements <#list entity.interfacesToI
 as ifc>${ifc}<#if ifc_has_next>, </#if></#list></#if> {
 
 <#list entity.properties as property>
-<#if property.notNull && complexTypes?seq_contains(property.propertyType)>
-    /** Not-null value. */
-</#if>
-    private ${property.javaType} ${property.propertyName};
+    <#if property.notNull && complexTypes?seq_contains(property.propertyType)>
+        /** Not-null value. */
+    </#if>
+    <#if property.isExpose()>
+        <#if property.isJsonSerialize() && property.isJsonDeserialize()>
+            @Expose
+        <#else>
+            @Expose(serialize=<#if property.isJsonSerialize()> true <#else>false</#if>,deserialize=<#if property.isJsonDeserialize()> true <#else>false</#if>)
+        </#if>
+    </#if>
+    <#if property.getJsonFiled() ??>
+        @SerializedName("${property.getJsonFiled()}")
+    </#if>
+        private ${property.javaType} ${property.propertyName};
 </#list>
 
 <#if entity.active>

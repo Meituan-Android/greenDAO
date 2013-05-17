@@ -17,19 +17,12 @@
  */
 package de.greenrobot.daogenerator.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import de.greenrobot.daogenerator.*;
+import org.junit.Test;
 
 import java.io.File;
 
-import org.junit.Test;
-
-import de.greenrobot.daogenerator.DaoGenerator;
-import de.greenrobot.daogenerator.DaoUtil;
-import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
-import de.greenrobot.daogenerator.Schema;
+import static org.junit.Assert.*;
 
 public class SimpleDaoGeneratorTest {
 
@@ -38,10 +31,11 @@ public class SimpleDaoGeneratorTest {
         Schema schema = new Schema(1, "de.greenrobot.testdao");
         Entity adressTable = schema.addEntity("Adresse");
         Property idProperty = adressTable.addIdProperty().getProperty();
+        adressTable.addStringProperty("json").serializedName("haha");
         adressTable.addIntProperty("count").index();
         adressTable.addIntProperty("dummy").notNull();
         assertEquals(1, schema.getEntities().size());
-        assertEquals(3, adressTable.getProperties().size());
+        assertEquals(4, adressTable.getProperties().size());
 
         File daoFile = new File("test-out/de/greenrobot/testdao/" + adressTable.getClassName() + "Dao.java");
         daoFile.delete();

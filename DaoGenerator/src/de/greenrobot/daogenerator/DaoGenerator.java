@@ -17,6 +17,10 @@
  */
 package de.greenrobot.daogenerator;
 
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,13 +31,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-
 /**
  * Once you have your model created, use this class to generate entities and DAOs.
- * 
+ *
  * @author Markus
  */
 public class DaoGenerator {
@@ -58,8 +58,10 @@ public class DaoGenerator {
         patternKeepMethods = compilePattern("METHODS");
 
         Configuration config = new Configuration();
+
         config.setClassForTemplateLoading(this.getClass(), "/");
         config.setObjectWrapper(new DefaultObjectWrapper());
+
 
         templateDao = config.getTemplate("dao.ftl");
         templateDaoMaster = config.getTemplate("dao-master.ftl");
@@ -74,12 +76,16 @@ public class DaoGenerator {
                 + " END.*?\n", flags);
     }
 
-    /** Generates all entities and DAOs for the given schema. */
+    /**
+     * Generates all entities and DAOs for the given schema.
+     */
     public void generateAll(Schema schema, String outDir) throws Exception {
         generateAll(schema, outDir, null);
     }
 
-    /** Generates all entities and DAOs for the given schema. */
+    /**
+     * Generates all entities and DAOs for the given schema.
+     */
     public void generateAll(Schema schema, String outDir, String outDirTest) throws Exception {
         long start = System.currentTimeMillis();
 
@@ -129,7 +135,7 @@ public class DaoGenerator {
     }
 
     private void generate(Template template, File outDirFile, String javaPackage, String javaClassName, Schema schema,
-            Entity entity) throws Exception {
+                          Entity entity) throws Exception {
         try {
             File file = toJavaFilename(outDirFile, javaPackage, javaClassName);
             file.getParentFile().mkdirs();

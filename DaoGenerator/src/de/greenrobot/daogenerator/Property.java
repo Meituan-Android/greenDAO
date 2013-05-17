@@ -17,7 +17,9 @@
  */
 package de.greenrobot.daogenerator;
 
-/** Model class for an entity's property: a Java property mapped to a data base column. */
+/**
+ * Model class for an entity's property: a Java property mapped to a data base column.
+ */
 public class Property {
 
     public static class PropertyBuilder {
@@ -73,6 +75,25 @@ public class Property {
             return this;
         }
 
+        public PropertyBuilder serializedName(String jsonFiled) {
+            property.jsonFiled = jsonFiled;
+            return this;
+        }
+
+        public PropertyBuilder jsonExpose(boolean serialize, boolean deserialize) {
+            property.expose = true;
+            property.serialize = serialize;
+            property.deserialize = deserialize;
+            return this;
+        }
+
+        public PropertyBuilder jsonExpose() {
+            property.expose = true;
+            property.serialize = true;
+            property.deserialize = true;
+            return this;
+        }
+
         public PropertyBuilder index() {
             Index index = new Index();
             index.addProperty(property);
@@ -123,7 +144,15 @@ public class Property {
     private boolean unique;
     private boolean notNull;
 
-    /** Initialized in 2nd pass */
+    private boolean expose;
+    private boolean serialize;
+    private boolean deserialize;
+    private String jsonFiled;
+
+
+    /**
+     * Initialized in 2nd pass
+     */
     private String constraints;
 
     private int ordinal;
@@ -189,8 +218,24 @@ public class Property {
         this.ordinal = ordinal;
     }
 
+    public String getJsonFiled() {
+        return jsonFiled;
+    }
+
     public Entity getEntity() {
         return entity;
+    }
+
+    public boolean isExpose() {
+        return expose;
+    }
+
+    public boolean isJsonSerialize() {
+        return serialize;
+    }
+
+    public boolean isJsonDeserialize() {
+        return deserialize;
     }
 
     void init2ndPass() {
