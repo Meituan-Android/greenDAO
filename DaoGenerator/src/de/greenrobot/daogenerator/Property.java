@@ -75,6 +75,11 @@ public class Property {
             return this;
         }
 
+        public PropertyBuilder defaultStringValueNotNull() {
+            property.defaultStringNotNull = true;
+            return this;
+        }
+
         public PropertyBuilder serializedName(String jsonFiled) {
             property.jsonFiled = jsonFiled;
             return this;
@@ -143,6 +148,7 @@ public class Property {
 
     private boolean unique;
     private boolean notNull;
+    private boolean defaultStringNotNull;
 
     private boolean expose;
     private boolean serialize;
@@ -204,6 +210,10 @@ public class Property {
 
     public boolean isNotNull() {
         return notNull;
+    }
+
+    public boolean isDefaultStringNotNull() {
+        return propertyType == PropertyType.String && defaultStringNotNull;
     }
 
     public String getJavaType() {

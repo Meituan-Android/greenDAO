@@ -55,19 +55,19 @@ as ifc>${ifc}<#if ifc_has_next>, </#if></#list></#if> {
 
 <#list entity.properties as property>
     <#if property.notNull && complexTypes?seq_contains(property.propertyType)>
-        /** Not-null value. */
+    /** Not-null value. */
     </#if>
     <#if property.isExpose()>
         <#if property.isJsonSerialize() && property.isJsonDeserialize()>
-            @Expose
+    @Expose
         <#else>
-            @Expose(serialize=<#if property.isJsonSerialize()> true <#else>false</#if>,deserialize=<#if property.isJsonDeserialize()> true <#else>false</#if>)
+    @Expose(serialize=<#if property.isJsonSerialize()> true <#else>false</#if>,deserialize=<#if property.isJsonDeserialize()> true <#else>false</#if>)
         </#if>
     </#if>
     <#if property.getJsonFiled() ??>
-        @SerializedName("${property.getJsonFiled()}")
+    @SerializedName("${property.getJsonFiled()}")
     </#if>
-        private ${property.javaType} ${property.propertyName};
+    private ${property.javaType} ${property.propertyName}<#if property.isDefaultStringNotNull()> = ""</#if>;
 </#list>
 
 <#if entity.active>
